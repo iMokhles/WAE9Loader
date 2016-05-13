@@ -11,7 +11,9 @@ WAEnhancer9 sideload version ( FULL version )
 ### WAEnhancer9 Features 
 
 1 - support notifications ( even if the bundle it isn't net.whatsapp.WhatsApp )
+
 2 - native IPAD UI
+
 3 - full description : http://imokhles.com/waenhancer9/
 
 ### How-To:
