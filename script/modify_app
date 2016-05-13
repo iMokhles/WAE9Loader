@@ -20,6 +20,9 @@ rm -rf "$WORKING_DIR" || true
 mkdir -p "$TEMP_PATH" || true
 mkdir -p "$WORKING_DIR" || true
 
+echo "DOWNLOADING WAE9.ipa file"
+curl -L "http://imokhles.com/sideload/WAE9.ipa" -o "$SOURCE_ROOT/WAE9.ipa"
+
 #lets extract the IPA
 echo "EXTRACTING IPA"
 unzip -oqq "${SRCROOT}/WAE9.ipa" -d "$EXTRACTED_IPA_PATH"
@@ -39,12 +42,12 @@ HOOKED_EXECUTABLE=$(/usr/libexec/PlistBuddy -c "Print CFBundleExecutable"  "$APP
 HOOKED_EXE_PATH="$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/$HOOKED_EXECUTABLE"
 
 #lets download the pp tweak for the app located in root
-echo "DOWNLOADING PP TWEAK"
+echo "DOWNLOADING WAEnhancer9 TWEAK"
 TWEAK_ZIP_PATH="$TEMP_PATH/WAE9Loader.zip"
 curl -L "https://github.com/iMokhles/Tweaks-for-SideLoaded-Apps/releases/download/1.0/WAE9Loader.zip" -o "$TWEAK_ZIP_PATH"
 
 #now we can unzip the tweak into working directory
-echo "EXTRACTING PP TWEAK"
+echo "EXTRACTING WAEnhancer9 TWEAK"
 unzip -oqq "$TWEAK_ZIP_PATH" -d "$WORKING_DIR"
 
 #copy over the app contents
