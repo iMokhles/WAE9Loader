@@ -2,12 +2,18 @@
 
 #PRODUCT_SETTINGS_PATH
 PP_CONFIG_PATH="$SOURCE_ROOT/SIDELOADER_OPTIONS.plist"
+ENTI_FILE_PATH="$SOURCE_ROOT/app.entitlements"
+DECODER_PATH="$SOURCE_ROOT/mpdecoder"
+URL_SCHEME="wae9"
 
 OVERWRITE_ORIGINAL_APP=$(/usr/libexec/PlistBuddy -c "Print OVERWRITE_ORIGINAL_APP" "$PP_CONFIG_PATH")
 echo "OVERWRITE_ORIGINAL_APP: $OVERWRITE_ORIGINAL_APP"
 
 KEEP_ORIGINAL_APP_NAME=$(/usr/libexec/PlistBuddy -c "Print KEEP_ORIGINAL_APP_NAME" "$PP_CONFIG_PATH")
 echo "KEEP_ORIGINAL_APP_NAME: $KEEP_ORIGINAL_APP_NAME"
+
+IS_IPAD_VERSION=$(/usr/libexec/PlistBuddy -c "Print IS_IPAD_VERSION" "$PP_CONFIG_PATH")
+echo "IS_IPAD_VERSION: $IS_IPAD_VERSION"
 
 #define some common paths
 TEMP_PATH="${SRCROOT}/temp"
@@ -19,9 +25,6 @@ rm -rf "$WORKING_DIR" || true
 
 mkdir -p "$TEMP_PATH" || true
 mkdir -p "$WORKING_DIR" || true
-
-echo "DOWNLOADING WAE9.ipa file"
-curl -L "http://imokhles.com/sideload/WAE9.ipa" -o "$SOURCE_ROOT/WAE9.ipa"
 
 #lets extract the IPA
 echo "EXTRACTING IPA"
@@ -68,6 +71,17 @@ else
     echo "EXE IS EXECUTABLE"
 fi
 
+
+/usr/libexec/PlistBuddy -c "Set ::CFBundleURLTypes:0:CFBundleURLName  $PRODUCT_BUNDLE_IDENTIFIER" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/Info.plist"
+/usr/libexec/PlistBuddy -c "Set ::CFBundleURLTypes:0::CFBundleURLSchemes:0  $URL_SCHEME" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/Info.plist"
+
+#support ipad screen
+if [ "$IS_IPAD_VERSION" == true ] ; then
+echo 'IS_IPAD_VERSION IS ENABLED'
+/usr/libexec/PlistBuddy -c "Set ::UIDeviceFamily:0  2" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/Info.plist"
+/usr/libexec/PlistBuddy -c "Set :UIRequiredDeviceCapabilities:telephony  NO" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/Info.plist"
+fi
+
 #change the display name to WAEnhancer9
 if [ "$KEEP_ORIGINAL_APP_NAME" != true ] ; then
     echo 'KEEP_ORIGINAL_APP_NAME IS NOT ENABLED'
@@ -75,21 +89,30 @@ if [ "$KEEP_ORIGINAL_APP_NAME" != true ] ; then
 
 fi
 
+
 if [ "$OVERWRITE_ORIGINAL_APP" != true ] ; then
     echo 'PUSH IS NOT ENABLED'
     /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $PRODUCT_BUNDLE_IDENTIFIER" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/Info.plist"
-    /usr/libexec/PlistBuddy -c "Set :CFBundleURLTypes:CFBundleURLName  $PRODUCT_BUNDLE_IDENTIFIER" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/Info.plist"
 fi
 
 #add the dylib
 "${SRCROOT}/script/insert_dylib" --all-yes --inplace --overwrite "@executable_path/WAEnhancer9.dylib" "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/$HOOKED_EXECUTABLE"
 
+echo "add the correct entitlements"
 #add the correct entitlements
 TEMP_PLIST="$TEMP_PATH/temp.plist"
+echo "add the correct entitlements 2"
 REAL_CODE_SIGN_ENTITLEMENTS="$TEMP_PATH/app.entitlements"
-security cms -D -i ~/Library/MobileDevice/Provisioning\ Profiles/"$EXPANDED_PROVISIONING_PROFILE.mobileprovision" -o "$TEMP_PLIST"
+echo "add the correct entitlements 3"
+cp $ENTI_FILE_PATH $REAL_CODE_SIGN_ENTITLEMENTS
+echo "add the correct entitlements $EXPANDED_PROVISIONING_PROFILE.mobileprovision"
+$DECODER_PATH -f ~/Library/MobileDevice/Provisioning\ Profiles/"$EXPANDED_PROVISIONING_PROFILE.mobileprovision" -o "$TEMP_PLIST"
+echo "add the correct entitlements 5"
+echo security cms -D -i ~/Library/MobileDevice/Provisioning\ Profiles/"$EXPANDED_PROVISIONING_PROFILE.mobileprovision" -o "$TEMP_PLIST"
+
 /usr/libexec/PlistBuddy -c "Print Entitlements" "$TEMP_PLIST" -x > "$REAL_CODE_SIGN_ENTITLEMENTS"
 
+echo "sign all the executable binaries"
 #sign all the executable binaries
 for DYLIB in "$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/"*.dylib
 do
@@ -97,6 +120,7 @@ do
     echo "SIGNING: $FILENAME"
     /usr/bin/codesign --force --sign "$EXPANDED_CODE_SIGN_IDENTITY" "$DYLIB" 
 done
+
 
 APP_PLUGINS_PATH="$BUILT_PRODUCTS_DIR/$TARGET_NAME.app/PlugIns"
 if [ "$OVERWRITE_ORIGINAL_APP" != true ] ; then

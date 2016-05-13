@@ -8,5 +8,7 @@
 	<false/>
 	<key>CREATE_IPA_FILES</key>
 	<true/>
+	<key>IS_IPAD_VERSION</key>
+	<true/>
 </dict>
 </plist>

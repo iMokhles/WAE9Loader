@@ -15,6 +15,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4316A2E41CE66CE600E60AEA /* mpdecoder */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = mpdecoder; sourceTree = SOURCE_ROOT; };
 		4331501F1CE5375600E4D5DF /* WAE9Loader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WAE9Loader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		433150231CE5375600E4D5DF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		433150251CE5375600E4D5DF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -23,7 +24,7 @@
 		433150291CE5375600E4D5DF /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		4331503F1CE53ACA00E4D5DF /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
 		433150411CE53AD900E4D5DF /* SIDELOADER_OPTIONS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = SIDELOADER_OPTIONS.plist; sourceTree = SOURCE_ROOT; };
-		433150431CE53DAC00E4D5DF /* modify_app */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = modify_app; path = script/modify_app; sourceTree = SOURCE_ROOT; };
+		433150431CE53DAC00E4D5DF /* modify_app */ = {isa = PBXFileReference; explicitFileType = text.script.sh; fileEncoding = 4; name = modify_app; path = script/modify_app; sourceTree = SOURCE_ROOT; };
 		433150451CE5461800E4D5DF /* app.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = app.entitlements; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -69,6 +70,7 @@
 		433150221CE5375600E4D5DF /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				4316A2E41CE66CE600E60AEA /* mpdecoder */,
 				433150451CE5461800E4D5DF /* app.entitlements */,
 				433150431CE53DAC00E4D5DF /* modify_app */,
 				433150411CE53AD900E4D5DF /* SIDELOADER_OPTIONS.plist */,
@@ -281,7 +283,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.imokhles.WAE9Loader;
+				PRODUCT_BUNDLE_IDENTIFIER = com.imokhles.WAE9;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -295,7 +297,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.imokhles.WAE9Loader;
+				PRODUCT_BUNDLE_IDENTIFIER = com.imokhles.WAE9;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -319,6 +321,7 @@
 				433150381CE5375600E4D5DF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
